@@ -19,8 +19,6 @@ import {
   KeyRound,
   ArrowLeft,
   MapPin,
-  Sparkles,
-  Award,
 } from 'lucide-react';
 
 const BOYS_HOSTELS = [
@@ -404,114 +402,31 @@ export const AuthPage: React.FC = () => {
 
 
   return (
-    <div className="min-h-screen bg-[#dceeff] flex flex-col justify-center items-center p-4 sm:p-6 lg:p-10 font-sans antialiased text-[#000000]">
+    <div className="min-h-screen bg-[#dceeff] flex flex-col justify-center items-center p-4 sm:p-6 lg:p-8 font-sans antialiased text-[#000000]">
       {/* Container */}
-      <div className="w-full max-w-6xl my-auto py-4 sm:py-6">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          
-          {/* Left Column: VIT Bhopal Campus Showcase & VTOP Integration */}
-          <div className="lg:col-span-6 flex flex-col space-y-6">
-            <div className="bg-white border-2 border-black rounded-[28px] p-6 sm:p-8 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] space-y-5">
-              <div className="flex items-center justify-between flex-wrap gap-2">
-                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#ffdf59] text-black border border-black text-xs font-black uppercase tracking-wider shadow-sm">
-                  <Sparkles className="h-3.5 w-3.5 text-black" />
-                  <span>Campus Innovation</span>
-                </div>
-                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#5c4ade] text-white border border-black text-xs font-bold shadow-sm">
-                  <Award className="h-3.5 w-3.5 text-[#55db9c]" />
-                  <span>VTOP Integration Proposal</span>
-                </div>
-              </div>
-
-              {/* Title & Description */}
-              <div className="space-y-2">
-                <h2 className="text-2xl sm:text-3xl font-extrabold text-black font-['Space_Grotesk',sans-serif] leading-tight">
-                  VIT-HEALTH &bull; Proposed for VTOP Integration
-                </h2>
-                <p className="text-xs sm:text-sm text-slate-700 leading-relaxed font-medium">
-                  Official initiative presented to university leadership in front of the iconic VIT Bhopal University arch, unifying student emergency dispatch, AI clinical triage, and telemedicine into the campus portal.
-                </p>
-              </div>
-
-              {/* Photo Showcase */}
-              <div className="relative group overflow-hidden rounded-[20px] border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] bg-slate-900">
-                <img
-                  src="/vit_bhopal_vtop_launch.jpg"
-                  alt="VIT-HEALTH Proposed for VTOP Integration presented to VIT Bhopal leadership"
-                  className="w-full h-auto max-h-[420px] object-cover object-center transition-transform duration-300 group-hover:scale-[1.01]"
-                />
-                <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/90 via-black/60 to-transparent p-4 sm:p-5 pt-10 text-white">
-                  <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-[#55db9c] text-black font-black text-[11px] uppercase tracking-wider mb-1.5">
-                    VIT Bhopal University
-                  </div>
-                  <p className="text-sm sm:text-base font-extrabold font-['Space_Grotesk',sans-serif] drop-shadow-sm leading-snug">
-                    Presented to University Leadership at the Main Entrance
-                  </p>
-                  <p className="text-xs text-slate-300 font-medium mt-1">
-                    Connecting hostel residents, the university medical center, and rapid-response ambulances.
-                  </p>
-                </div>
-              </div>
-
-              {/* Feature Highlights Grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
-                <div className="p-3.5 bg-[#e8f7ee] border border-black rounded-[18px] flex items-start gap-3">
-                  <div className="p-2 bg-[#55db9c] border border-black rounded-xl text-black shrink-0">
-                    <HeartPulse className="h-4 w-4" />
-                  </div>
-                  <div>
-                    <h4 className="text-xs font-black text-black uppercase tracking-wide">Rapid Ambulance</h4>
-                    <p className="text-[11px] text-slate-700 font-medium leading-tight mt-0.5">
-                      Road-routed live tracking to Boys &amp; Girls Hostels
-                    </p>
-                  </div>
-                </div>
-
-                <div className="p-3.5 bg-[#fff4d6] border border-black rounded-[18px] flex items-start gap-3">
-                  <div className="p-2 bg-[#ffdf59] border border-black rounded-xl text-black shrink-0">
-                    <ShieldCheck className="h-4 w-4" />
-                  </div>
-                  <div>
-                    <h4 className="text-xs font-black text-black uppercase tracking-wide">AI Clinical Triage</h4>
-                    <p className="text-[11px] text-slate-700 font-medium leading-tight mt-0.5">
-                      XGBoost trained on MIMIC-IV clinical datasets
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* AI Banner on Desktop */}
-            <div className="hidden lg:flex p-4 rounded-[20px] bg-white/70 border border-black/40 text-center text-xs font-semibold text-slate-700 items-center justify-center gap-2">
-              <Stethoscope className="h-4 w-4 text-[#5c4ade] shrink-0" />
-              <span>Equipped with XGBoost Emergency Triage &amp; PhysioNet MIMIC-IV Clinical Models</span>
-            </div>
+      <div className="w-full max-w-lg space-y-6">
+        {/* App Logo / Healthcare Header */}
+        <div className="text-center space-y-3">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#5c4ade] text-white border border-black shadow-sm text-xs font-bold uppercase tracking-wider">
+            <HeartPulse className="h-4 w-4 animate-pulse text-[#55db9c]" />
+            <span>VIT Bhopal &bull; Emergency Telemedicine</span>
           </div>
 
-          {/* Right Column: Student Portal Authentication Card */}
-          <div className="lg:col-span-6 flex flex-col space-y-6">
-            {/* App Logo / Healthcare Header */}
-            <div className="text-center space-y-3">
-              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#5c4ade] text-white border border-black shadow-sm text-xs font-bold uppercase tracking-wider">
-                <HeartPulse className="h-4 w-4 animate-pulse text-[#55db9c]" />
-                <span>VIT Bhopal &bull; Emergency Telemedicine</span>
-              </div>
+          <div className="space-y-1">
+            <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-black font-['Space_Grotesk',sans-serif]">
+              TELEMEDICINE
+            </h1>
+            <h2 className="text-xl sm:text-2xl font-bold tracking-wide text-[#5c4ade]">
+              STUDENT PORTAL
+            </h2>
+          </div>
+          <p className="text-xs sm:text-sm text-slate-700 font-medium max-w-sm mx-auto">
+            Secure access to AI-powered campus healthcare, rapid emergency ambulance dispatch, and clinic appointments.
+          </p>
+        </div>
 
-              <div className="space-y-1">
-                <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-black font-['Space_Grotesk',sans-serif]">
-                  TELEMEDICINE
-                </h1>
-                <h2 className="text-xl sm:text-2xl font-bold tracking-wide text-[#5c4ade]">
-                  STUDENT PORTAL
-                </h2>
-              </div>
-              <p className="text-xs sm:text-sm text-slate-700 font-medium max-w-sm mx-auto">
-                Secure access to AI-powered campus healthcare, rapid emergency ambulance dispatch, and clinic appointments.
-              </p>
-            </div>
-
-            {/* Main Authentication Card */}
-            <div className="bg-white border-2 border-black rounded-[28px] p-6 sm:p-8 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] transition-all">
+        {/* Main Authentication Card */}
+        <div className="bg-white border-2 border-black rounded-[28px] p-6 sm:p-8 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] transition-all">
           {/* Tabs: LOGIN / SIGN UP (Shown only when in Login or Signup mode) */}
           {activeTab === 'LOGIN' || activeTab === 'SIGNUP' ? (
             <div className="grid grid-cols-2 gap-2 p-1.5 bg-[#e9e9e9] border border-black rounded-[18px] mb-6">
@@ -1283,15 +1198,12 @@ export const AuthPage: React.FC = () => {
           )}
         </div>
 
-        {/* Footer info banner on Mobile */}
-        <div className="lg:hidden p-4 rounded-[20px] bg-white/70 border border-black/40 text-center text-xs font-semibold text-slate-700 flex items-center justify-center gap-2">
+        {/* Footer info banner */}
+        <div className="p-4 rounded-[20px] bg-white/70 border border-black/40 text-center text-xs font-semibold text-slate-700 flex items-center justify-center gap-2">
           <Stethoscope className="h-4 w-4 text-[#5c4ade] shrink-0" />
           <span>Equipped with XGBoost Emergency Triage &amp; PhysioNet MIMIC-IV Clinical Models</span>
         </div>
       </div>
-
     </div>
-  </div>
-</div>
   );
 };
