@@ -231,19 +231,6 @@ Visit **`http://localhost:5173`** in your browser.
 
 ---
 
-## 👥 Role-Based Access Control (RBAC)
-
-| Role | Access Permissions |
-| :--- | :--- |
-| **Student** | Emergency dispatch, AI symptom checker, personal EMR, appointments |
-| **Doctor / Medical Officer** | EMR access, appointment consultation, digital prescriptions |
-| **Ambulance Driver / Security** | Live dispatch notifications, turn-by-turn route tracking |
-| **Warden / Floor Rep** | Block-level outbreak surveillance, hygiene alerts |
-| **Pharmacist** | Medicine inventory, prescription fulfillment |
-| **Admin** | System health, user roles, campus infrastructure configuration |
-
----
-
 ## 🛡️ License & Academic Citation
 
 This project is licensed under the **MIT License**.
