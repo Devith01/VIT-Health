@@ -1,0 +1,69 @@
+# Node Modules & Dependencies
+node_modules/
+**/node_modules/
+package-lock.json
+
+# Build & Distribution Folders
+dist/
+**/dist/
+build/
+**/build/
+
+# Python Virtual Environment & Cache
+venv/
+**/venv/
+.venv/
+**/.venv/
+__pycache__/
+**/__pycache__/
+*.py[cod]
+*$py.class
+
+# Large Binaries & Executables
+*.exe
+*.dll
+*.so
+*.dylib
+*.bin
+Antigravity-x64.exe
+cloudflared.exe
+cloudflared_runner.exe
+
+# Environment Files & Local Secrets
+.env
+.env.*
+!.env.example
+**/.env
+**/.env.*
+!**/.env.example
+
+# Local Logs & Run Artifacts
+*.log
+**/*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.DS_Store
+Thumbs.db
+
+# IDE & Editor Files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Databases & Local State
+*.db
+*.db-journal
+*.sqlite
+*.sqlite3
+database/prisma/dev.db
+database/prisma/dev.db-journal
+
+# Vite & Bundler Cache
+.vite/
+**/.vite/
+.turbo/
+.cache/

@@ -1,0 +1,392 @@
+// VIT-Health Database Schema - Proposed for VTOP Integration
+// Academic Prototype for VIT Bhopal Project Exhibition
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  STUDENT
+  DOCTOR
+  ADMIN
+  SECURITY_OFFICER
+  AMBULANCE_OFFICER
+  FLOOR_REPRESENTATIVE
+  PHARMACY_DESK
+  FACULTY
+}
+
+enum SeverityLevel {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum AppointmentType {
+  IN_PERSON
+  TELECONSULTATION
+}
+
+enum AppointmentStatus {
+  PENDING
+  CONFIRMED
+  COMPLETED
+  CANCELLED
+}
+
+enum EmergencyStatus {
+  REPORTED
+  CLINIC_NOTIFIED
+  SECURITY_CHECKING
+  AMBULANCE_DISPATCHED
+  PATIENT_PICKED_UP
+  RESOLVED
+  CANCELLED
+}
+
+enum AmbulanceStatus {
+  AVAILABLE
+  ASSIGNED
+  EN_ROUTE
+  ARRIVED
+  TRANSPORTING
+  BUSY
+  OFFLINE
+}
+
+enum OrderStatus {
+  PENDING
+  ACCEPTED
+  PREPARING
+  READY_FOR_DELIVERY
+  OUT_FOR_DELIVERY
+  DELIVERED
+  CANCELLED
+}
+
+enum AlertStatus {
+  NORMAL
+  WARNING
+  HIGH_RISK
+  ALERT
+}
+
+enum DiseaseScope {
+  ROOM
+  FLOOR
+  BLOCK
+  CAMPUS
+}
+
+model User {
+  id           String   @id @default(uuid())
+  email        String   @unique
+  passwordHash String
+  fullName     String
+  phoneNumber  String?
+  roleName     UserRole
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  studentProfile             StudentProfile?
+  doctorProfile              DoctorProfile?
+  securityOfficerProfile     SecurityOfficerProfile?
+  ambulanceOfficerProfile    AmbulanceOfficerProfile?
+  floorRepresentativeProfile FloorRepresentativeProfile?
+  pharmacyStaffProfile       PharmacyStaffProfile?
+  facultyProfile             FacultyProfile?
+}
+
+model Hostel {
+  id     String  @id @default(uuid())
+  name   String  @unique // e.g. Boys Hostel 1
+  code   String  @unique // e.g. BH1
+  blocks Block[]
+}
+
+model Block {
+  id       String  @id @default(uuid())
+  hostelId String
+  hostel   Hostel  @relation(fields: [hostelId], references: [id])
+  name     String  // e.g. Block A
+  floors   Floor[]
+}
+
+model Floor {
+  id       String @id @default(uuid())
+  blockId  String
+  block    Block  @relation(fields: [blockId], references: [id])
+  floorNum Int    // e.g. 3
+  rooms    Room[]
+}
+
+model Room {
+  id           String        @id @default(uuid())
+  floorId      String
+  floor        Floor         @relation(fields: [floorId], references: [id])
+  roomNum      String        // e.g. 301
+  capacity     Int           @default(3)
+  students     StudentProfile[]
+  diseaseCases DiseaseCase[]
+}
+
+model StudentProfile {
+  id             String   @id @default(uuid())
+  userId         String   @unique
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  registrationNo String   @unique
+  department     String
+  yearOfStudy    Int
+  roomId         String?
+  room           Room?    @relation(fields: [roomId], references: [id])
+  symptomReports SymptomReport[]
+  appointments   Appointment[]
+  emergencies    EmergencyCase[]
+  medicineOrders MedicineOrder[]
+  mentalHealthScreenings MentalHealthScreening[]
+}
+
+model DoctorProfile {
+  id             String   @id @default(uuid())
+  userId         String   @unique
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  specialization String
+  licenseNumber  String   @unique
+  appointments   Appointment[]
+  consultations  Consultation[]
+}
+
+model SecurityOfficerProfile {
+  id              String  @id @default(uuid())
+  userId          String  @unique
+  user            User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  badgeNumber     String  @unique
+  assignedBlockName String?
+}
+
+model AmbulanceOfficerProfile {
+  id            String     @id @default(uuid())
+  userId        String     @unique
+  user          User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  ambulanceId   String?
+  ambulance     Ambulance? @relation(fields: [ambulanceId], references: [id])
+  vehicleNumber String
+}
+
+model FloorRepresentativeProfile {
+  id               String @id @default(uuid())
+  userId           String @unique
+  user             User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  assignedBlockName String
+  assignedFloorNum  Int
+}
+
+model PharmacyStaffProfile {
+  id        String @id @default(uuid())
+  userId    String @unique
+  user      User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  staffCode String @unique
+}
+
+model FacultyProfile {
+  id         String @id @default(uuid())
+  userId     String @unique
+  user       User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  employeeId String @unique
+  department String
+}
+
+model SymptomQuestion {
+  id           String   @id @default(uuid())
+  questionText String
+  category     String   // e.g. GENERAL, RESPIRATORY, GASTROINTESTINAL
+  inputType    String   // YES_NO, SCALE, MULTIPLE_CHOICE
+  isActive     Boolean  @default(true)
+}
+
+model SymptomReport {
+  id               String        @id @default(uuid())
+  studentId        String
+  student          StudentProfile @relation(fields: [studentId], references: [id])
+  freeTextSymptoms String?
+  painScale        Int           @default(1)
+  durationDays     Int           @default(1)
+  imageUrl         String?
+  structuredInputs Json?
+  aiPrediction     AIPrediction?
+  appointment      Appointment?
+  diseaseCases     DiseaseCase[]
+  createdAt        DateTime      @default(now())
+}
+
+model AIPrediction {
+  id                      String        @id @default(uuid())
+  symptomReportId         String        @unique
+  symptomReport           SymptomReport @relation(fields: [symptomReportId], references: [id], onDelete: Cascade)
+  topConditions           Json          // Array of { disease, confidence, description }
+  predictedSeverity       SeverityLevel
+  severityScore           Float
+  extractedSymptoms       String[]
+  contributingFactors     String[]
+  recommendedAction       String
+  safetyOverrideTriggered Boolean       @default(false)
+  safetyOverrideReason    String?
+  createdAt               DateTime      @default(now())
+  aiFeedbacks             AIFeedback[]
+}
+
+model Appointment {
+  id              String            @id @default(uuid())
+  studentId       String
+  student         StudentProfile    @relation(fields: [studentId], references: [id])
+  doctorId        String
+  doctor          DoctorProfile     @relation(fields: [doctorId], references: [id])
+  symptomReportId String?           @unique
+  symptomReport   SymptomReport?    @relation(fields: [symptomReportId], references: [id])
+  type            AppointmentType   @default(IN_PERSON)
+  status          AppointmentStatus @default(PENDING)
+  priorityScore   Float             @default(50.0)
+  appointmentTime DateTime
+  meetingLink     String?
+  notes           String?
+  consultation    Consultation?
+  createdAt       DateTime          @default(now())
+}
+
+model Consultation {
+  id                   String       @id @default(uuid())
+  appointmentId        String       @unique
+  appointment          Appointment  @relation(fields: [appointmentId], references: [id])
+  doctorId             String
+  doctor               DoctorProfile @relation(fields: [doctorId], references: [id])
+  clinicalNotes        String
+  finalDiagnosis       String
+  icdCode              String?
+  recommendedLeaveDays Int          @default(0)
+  aiFeedback           AIFeedback?
+  createdAt            DateTime     @default(now())
+}
+
+model AIFeedback {
+  id              String       @id @default(uuid())
+  aiPredictionId  String
+  aiPrediction    AIPrediction @relation(fields: [aiPredictionId], references: [id])
+  consultationId  String       @unique
+  consultation    Consultation @relation(fields: [consultationId], references: [id])
+  isCorrect       Boolean
+  doctorDiagnosis String
+  notes           String?
+  createdAt       DateTime     @default(now())
+}
+
+model DiseaseCase {
+  id              String        @id @default(uuid())
+  symptomReportId String?
+  symptomReport   SymptomReport? @relation(fields: [symptomReportId], references: [id])
+  diseaseCategory String        // e.g. Food Poisoning
+  isConfirmed     Boolean       @default(false) // Doctor confirmed vs AI suspected
+  severity        SeverityLevel
+  roomId          String
+  room            Room          @relation(fields: [roomId], references: [id])
+  reportedAt      DateTime      @default(now())
+}
+
+model DiseaseThreshold {
+  id                String       @id @default(uuid())
+  diseaseCategory   String       // e.g. Food Poisoning
+  scope             DiseaseScope @default(FLOOR)
+  thresholdCount    Int          @default(10)
+  timeWindowHours   Int          @default(24)
+  warningPercentage Float        @default(80.0)
+  isActive          Boolean      @default(true)
+  createdAt         DateTime     @default(now())
+}
+
+model OutbreakAlert {
+  id                 String      @id @default(uuid())
+  diseaseCategory    String
+  scope              DiseaseScope
+  targetLocationName String      // e.g. Block A - Floor 3
+  status             AlertStatus @default(WARNING)
+  currentCount       Int
+  thresholdCount     Int
+  predictedNextCount Int?
+  outbreakRisk       String?
+  message            String
+  createdAt          DateTime    @default(now())
+}
+
+model EmergencyCase {
+  id          String          @id @default(uuid())
+  studentId   String
+  student     StudentProfile  @relation(fields: [studentId], references: [id])
+  reportedBy  String          // Self or Third-party reporter name
+  description String
+  severity    SeverityLevel   @default(CRITICAL)
+  status      EmergencyStatus @default(REPORTED)
+  location    String          // Hostel Block, Floor, Room
+  ambulanceId String?
+  ambulance   Ambulance?      @relation(fields: [ambulanceId], references: [id])
+  createdAt   DateTime        @default(now())
+}
+
+model Ambulance {
+  id                     String                    @id @default(uuid())
+  vehicleNumber          String                    @unique
+  driverName             String
+  driverPhone            String
+  status                 AmbulanceStatus           @default(AVAILABLE)
+  currentLat             Float?
+  currentLng             Float?
+  lastUpdated            DateTime?
+  emergencyCases         EmergencyCase[]
+  ambulanceOfficerProfiles AmbulanceOfficerProfile[]
+  createdAt              DateTime                  @default(now())
+}
+
+model Medication {
+  id          String              @id @default(uuid())
+  name        String
+  dosage      String
+  stockCount  Int                 @default(100)
+  isAvailable Boolean             @default(true)
+  orderItems  MedicineOrderItem[]
+}
+
+model MedicineOrder {
+  id              String              @id @default(uuid())
+  studentId       String
+  student         StudentProfile      @relation(fields: [studentId], references: [id])
+  prescriptionId  String?
+  status          OrderStatus         @default(PENDING)
+  deliveryAddress String
+  otpCode         String
+  items           MedicineOrderItem[]
+  createdAt       DateTime            @default(now())
+}
+
+model MedicineOrderItem {
+  id           String        @id @default(uuid())
+  orderId      String
+  order        MedicineOrder @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  medicationId String
+  medication   Medication    @relation(fields: [medicationId], references: [id])
+  quantity     Int           @default(1)
+}
+
+model MentalHealthScreening {
+  id            String         @id @default(uuid())
+  studentId     String
+  student       StudentProfile @relation(fields: [studentId], references: [id])
+  responses     Json
+  riskLevel     String         // LOW_CONCERN, MODERATE_CONCERN, HIGH_CONCERN
+  isReferred    Boolean        @default(false)
+  counselorNote String?
+  createdAt     DateTime       @default(now())
+}

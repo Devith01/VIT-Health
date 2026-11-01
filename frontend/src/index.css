@@ -1,0 +1,52 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+@import 'leaflet/dist/leaflet.css';
+
+:root {
+  /* Slush Palette Tokens */
+  --color-carbon: #000000;
+  --color-paper-white: #ffffff;
+  --color-sky-wash: #dceeff;
+  --color-concrete-gray: #cccccc;
+  --color-soft-mist: #e9e9e9;
+  --color-electric-blue: #4da2ff;
+  --color-mint-pop: #55db9c;
+  --color-lavender: #e9ccff;
+  --color-ember: #fb4903;
+  --color-sunburst: #ffd731;
+  --color-voltage-violet: #5c4ade;
+
+  /* Typography */
+  --font-lateral: 'Lateral', 'Druk', 'Bowlby One', sans-serif;
+  --font-aeonik-pro: 'Aeonik Pro', 'Inter', 'Satoshi', sans-serif;
+
+  /* Radii */
+  --radius-pills: 1600px;
+  --radius-cards: 20px;
+  --radius-cards-elevated: 40px;
+}
+
+@layer base {
+  body {
+    background-color: #dceeff;
+    color: #000000;
+    font-family: 'Inter', 'Aeonik Pro', ui-sans-serif, system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Space Grotesk', 'Lateral', 'Druk', sans-serif;
+    font-weight: 700;
+    color: #000000;
+  }
+}
+
+.leaflet-container {
+  width: 100%;
+  height: 100%;
+  border-radius: 1.25rem;
+  border: 1px solid #000000;
+  z-index: 10;
+}
+
